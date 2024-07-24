@@ -1,40 +1,101 @@
-import joblib 
-from sklearn.metrics import mean_absolute_error as mae
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
+import joblib  # Import joblib for saving and loading the model
+from sklearn.metrics import mean_absolute_error as mae  # Import mean_absolute_error to compute MAE
+import matplotlib.pyplot as plt  # Import matplotlib.pyplot for plotting graphs
+import seaborn as sns  # Import seaborn for advanced plotting
+import numpy as np  # Import numpy for numerical operations
+import os  # Import os for operating system functionalities like file path operations
 
-def evaluate_model(model_path,X_test,y_test):
-    model=joblib.load(model_path)
-    predict=model.predict(X_test)
-    result=mae(y_test,predict)
-    return result,predict
+def evaluate_model(model_path, X_test, y_test):
+    """
+    Load the model from the specified path, make predictions on the test set, 
+    and compute the mean absolute error between true and predicted values.
+    
+    Args:
+        model_path (str): Path to the saved model file.
+        X_test (numpy.ndarray): Features of the test set.
+        y_test (numpy.ndarray): True labels of the test set.
+        
+    Returns:
+        tuple: Mean Absolute Error and predictions.
+    """
+    try:
+        # Load the model from the specified file path
+        model = joblib.load(model_path)
+    except FileNotFoundError:
+        # Handle case where the model file is not found
+        print(f"Error: The model file '{model_path}' was not found.")
+        return None, None
+    
+    try:
+        # Predict using the loaded model
+        predictions = model.predict(X_test)
+    except Exception as e:
+        # Handle any errors that occur during prediction
+        print(f"Error during model prediction: {e}")
+        return None, None
+    
+    # Compute the mean absolute error between true and predicted values
+    result = mae(y_test, predictions)
+    return result, predictions
 
-def generate_plot(y_test,y_pred):
+def generate_plot(y_test, y_pred, save_path='sample.png'):
     """
-    function will generate a plot for linear regression it will be scatter plot
+    Generate a scatter plot to compare actual vs predicted values and save the plot.
+    
+    Args:
+        y_test (numpy.ndarray): True labels of the test set.
+        y_pred (numpy.ndarray): Predicted values from the model.
+        save_path (str): Path to save the generated plot.
+        
+    Returns:
+        None
     """
-    X=np.arange(0,len(y_test),dtype=int)
-    y_test_flat=np.sort(y_test.flatten())
-    y_pred_flat=np.sort(y_pred.flatten())
-    plt.figure(figsize=(6,6))
-    sns.scatterplot(x=X,y=y_test_flat,color='blue',label='True label')
-    sns.scatterplot(x=X,y=y_pred_flat,color='green',label='Predicted')
-    plt.xlabel("Input value")
-    plt.ylabel("Prediction")
-    plt.title("Actual Vs Predicted")
+    # Create an array of indices for x-axis
+    X = np.arange(0, len(y_test), dtype=int)
+    # Flatten and sort true and predicted values for better visualization
+    y_test_flat = np.sort(y_test.flatten())
+    y_pred_flat = np.sort(y_pred.flatten())
+    
+    # Create a figure with a specific size
+    plt.figure(figsize=(8, 6))
+    # Plot true values as blue scatter points
+    sns.scatterplot(x=X, y=y_test_flat, color='blue', label='True Label', s=50)
+    # Plot predicted values as green scatter points
+    sns.scatterplot(x=X, y=y_pred_flat, color='green', label='Predicted', s=50)
+    
+    # Set the labels for the x and y axes
+    plt.xlabel("Sample Index")
+    plt.ylabel("Value")
+    # Set the title of the plot
+    plt.title("Actual vs Predicted Values")
+    # Display the legend
     plt.legend()
-    plt.savefig('sample.png')
+    # Add a grid to the plot for better readability
+    plt.grid(True)
+    
+    # Save the plot to the specified file path
+    plt.savefig(save_path)
+    # Display the plot
     plt.show()
 
-#generate_plot([1,2,3,4,5],[2,4,5,6,7])
-
-
-
-if __name__=='__main__':
-    from data_preprocessing import load_data,preprocessing
-    X,y=load_data()
-    X_train,X_test,y_train,y_test=preprocessing(X,y)
-    result,predict=evaluate_model('../models/linear_regression.pkl',X_test,y_test)
-    generate_plot(y_test,predict)
-    print(f"Mean Squared Error:{result}")
+if __name__ == '__main__':
+    # Import functions for data preprocessing
+    from data_preprocessing import load_data, preprocessing
+    
+    # Load and preprocess the data
+    X, y = load_data()
+    X_train, X_test, y_train, y_test = preprocessing(X, y)
+    
+    # Define the path to the saved model file
+    model_path = '../models/linear_regression.pkl'
+    # Evaluate the model using the test data
+    result, predictions = evaluate_model(model_path, X_test, y_test)
+    
+    if result is not None and predictions is not None:
+        # Generate and display the plot if evaluation was successful
+        generate_plot(y_test, predictions)
+        # Print the mean absolute error of the model
+        print(f"Mean Absolute Error (MAE): {result}")
+    else:
+        # Print a message if model evaluation failed
+        print("Model evaluation failed.")

@@ -1,14 +1,21 @@
 import sqlite3
 
-conn=sqlite3.connect('linear.db')
-cursor=conn.cursor()
+# Connect to the SQLite database
+# The database file 'linear.db' will be created if it does not exist
+conn = sqlite3.connect('linear.db')
+cursor = conn.cursor()
 
-#Create table
+# Create a new table called 'data'
+# The table has two columns: X and y, both of type integer
 cursor.execute("""
-create table data(
-X int,
-y int)
+CREATE TABLE data (
+    X INT,  # Column for feature X
+    y INT   # Column for target y
+)
 """)
 
+# Commit the changes to the database
 conn.commit()
+
+# Close the connection to the database
 conn.close()
