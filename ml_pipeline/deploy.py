@@ -65,6 +65,7 @@ if st.button("Predict"):
         - **R-squared (R²):** Represents the proportion of the variance for a dependent variable that's explained by the independent variable(s) in the model.
     """)
 
+    
     result=run_pipeline()
 
     st.write(f'**Mean Absolute Error (MAE):** {np.round(result,3)}')
