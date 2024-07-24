@@ -1,9 +1,16 @@
 import numpy as np
 import sqlite3
 from sklearn.model_selection import train_test_split
+import os
 
 def load_data():
-    conn=sqlite3.connect("data\linear.db")
+    root_dir=os.path.dirname(__file__)
+    sub_dir=os.path.dirname(root_dir)
+    sub_dir_2=os.path.join(sub_dir,'data')
+    db_path=os.path.join(sub_dir_2,'linear.db')
+    print(db_path)
+
+    conn=sqlite3.connect(db_path)
     cursor=conn.cursor()
 
     X=[]
