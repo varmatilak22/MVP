@@ -3,7 +3,7 @@ import sqlite3
 from sklearn.model_selection import train_test_split
 
 def load_data():
-    conn=sqlite3.connect("C:\Py\programs\linear_regression\data\linear.db")
+    conn=sqlite3.connect("data\linear.db")
     cursor=conn.cursor()
 
     X=[]
