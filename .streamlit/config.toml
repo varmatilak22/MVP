@@ -1,16 +1,3 @@
-## Configuration
-
-The project uses a configuration file to manage server settings. Here are the available settings:
-
-- **`enableCORS`**: Controls whether Cross-Origin Resource Sharing (CORS) is enabled. Setting this to `false` disables CORS, which might be useful for local development environments or if you are sure about your security settings.
-  
-- **`enableWebsocketCompression`**: Controls whether WebSocket compression is enabled. Setting this to `false` disables compression, which may be beneficial for debugging or to reduce computational overhead.
-
-### Configuration File
-
-Here’s an example of a configuration file (`config.toml`):
-
-```toml
 [server]
 enableCORS = false
 enableWebsocketCompression = false
