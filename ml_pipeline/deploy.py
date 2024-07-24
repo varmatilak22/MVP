@@ -3,7 +3,9 @@ import joblib
 import numpy as np
 import os
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-from pipeline import run_pipeline
+#from pipeline import run_pipeline
+from data_preprocessing import load_data,preprocessing
+from model_evaluation import evaluate_model
 
 def load_model(model_path):
     return joblib.load(model_path)
@@ -66,7 +68,10 @@ if st.button("Predict"):
     """)
 
     
-    result=run_pipeline()
+    #result=run_pipeline()
+    X,y=load_data()
+    X_train,X_test,y_train,y_test=preprocessing(X,y)
+    result,output=evaluate_model(model_path,X_test,y_test)
 
     st.write(f'**Mean Absolute Error (MAE):** {np.round(result,3)}')
 
