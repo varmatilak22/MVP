@@ -1,5 +1,5 @@
 import joblib  # Import joblib for saving and loading the model
-from sklearn.metrics import mean_absolute_error as mae  # Import mean_absolute_error to compute MAE
+from sklearn.metrics import mean_absolute_error as mae,mean_squared_error as mse,r2_score # Import mean_absolute_error to compute MAE
 import matplotlib.pyplot as plt  # Import matplotlib.pyplot for plotting graphs
 import seaborn as sns  # Import seaborn for advanced plotting
 import numpy as np  # Import numpy for numerical operations
@@ -35,8 +35,11 @@ def evaluate_model(model_path, X_test, y_test):
         return None, None
     
     # Compute the mean absolute error between true and predicted values
-    result = mae(y_test, predictions)
-    return result, predictions
+    res1 = mae(y_test, predictions)
+    res2 = mse(y_test, predictions)
+    res3 = np.sqrt(mse(y_test, predictions))
+    res4 = r2_score(y_test, predictions)
+    return res1,res2,res3,res4, predictions
 
 def generate_plot(y_test, y_pred, save_path='sample.png'):
     """
@@ -89,13 +92,6 @@ if __name__ == '__main__':
     # Define the path to the saved model file
     model_path = '../models/linear_regression.pkl'
     # Evaluate the model using the test data
-    result, predictions = evaluate_model(model_path, X_test, y_test)
+    evaluate_model(model_path, X_test, y_test)
     
-    if result is not None and predictions is not None:
-        # Generate and display the plot if evaluation was successful
-        generate_plot(y_test, predictions)
-        # Print the mean absolute error of the model
-        print(f"Mean Absolute Error (MAE): {result}")
-    else:
-        # Print a message if model evaluation failed
-        print("Model evaluation failed.")
+    
