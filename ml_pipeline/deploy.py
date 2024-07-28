@@ -79,7 +79,7 @@ if st.button("Predict"):  # If the 'Predict' button is clicked
     # Evaluate the model
     X, y = load_data()  # Load data from the database
     X_train, X_test, y_train, y_test = preprocessing(X, y)  # Preprocess the data for training and testing
-    mae, mse, rmse, r2 = evaluate_model(model_path, X_test, y_test)  # Evaluate the model and get metrics
+    mae, mse, rmse, r2 ,_= evaluate_model(model_path, X_test, y_test)  # Evaluate the model and get metrics
 
     # Display evaluation metrics
     st.write(f'**Mean Absolute Error (MAE):** {np.round(mae, 3)}')  # Display Mean Absolute Error
